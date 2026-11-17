@@ -64,7 +64,16 @@ const ALIASES = {
 const statusEl = document.querySelector("#status");
 const countEl = document.querySelector("#count");
 const totalEl = document.querySelector("#total");
+const landPctEl = document.querySelector("#land-pct");
+const countryPctEl = document.querySelector("#country-pct");
 const barEl = document.querySelector("#bar");
+
+function formatPercent(value) {
+  if (!(value > 0)) return "0%";
+  if (value < 0.1) return "<0.1%";
+  if (value < 10) return `${value.toFixed(1)}%`;
+  return `${Math.round(value)}%`;
+}
 const searchInput = document.querySelector("#search");
 const listEl = document.querySelector("#list");
 const emptyEl = document.querySelector("#empty");
@@ -129,7 +138,9 @@ function boot() {
     feature.key = feature.properties.name;
     feature.label = labelFor(feature.key);
     feature.search = [feature.label, feature.key, ALIASES[feature.key] || ""].join(" ").toLowerCase();
+    feature.area = d3.geoArea(feature);
   });
+  const landTotal = features.reduce((sum, feature) => sum + feature.area, 0);
   features.sort((a, b) => a.label.localeCompare(b.label, "en"));
 
   const byKey = new Map(features.map((feature) => [feature.key, feature]));
@@ -246,9 +257,17 @@ function boot() {
 
   function renderCount() {
     const count = visitedCount();
+    let visitedLand = 0;
+    for (const feature of features) {
+      if (visited.has(feature.key)) visitedLand += feature.area;
+    }
+    const countryPct = features.length ? (count / features.length) * 100 : 0;
+    const landPct = landTotal ? (visitedLand / landTotal) * 100 : 0;
     countEl.textContent = String(count);
     totalEl.textContent = String(features.length);
-    barEl.style.width = `${Math.round((count / features.length) * 100)}%`;
+    countryPctEl.textContent = formatPercent(countryPct);
+    landPctEl.textContent = formatPercent(landPct);
+    barEl.style.width = `${landPct}%`;
     clearButton.disabled = count === 0;
   }
 

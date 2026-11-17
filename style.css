@@ -76,7 +76,7 @@ h1 {
 }
 
 .stats {
-  min-width: 180px;
+  min-width: 210px;
   text-align: right;
 }
 
@@ -95,11 +95,18 @@ h1 {
 }
 
 .of {
-  margin: 4px 0 10px;
+  margin: 6px 0 2px;
+}
+
+.share {
+  margin: 0 0 10px;
+  font-size: 14px;
+  color: var(--muted);
 }
 
 .track {
-  width: 180px;
+  width: 100%;
+  max-width: 210px;
   height: 8px;
   margin-left: auto;
   border-radius: 999px;

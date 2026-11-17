@@ -14,9 +14,10 @@
         <h1>Countries I've visited</h1>
         <p class="lede">Click a country to mark it, and click it again to clear it. Search the list when a country is too small to hit. This browser saves your list on this computer.</p>
       </div>
-      <div class="stats">
-        <p class="count"><strong id="count">0</strong> <span>visited</span></p>
-        <p class="of">of <span id="total">0</span> places on this map</p>
+      <div class="stats" aria-live="polite">
+        <p class="count"><strong id="land-pct">0%</strong></p>
+        <p class="of">of the world's land</p>
+        <p class="share"><span id="count">0</span> of <span id="total">0</span> countries (<span id="country-pct">0%</span>)</p>
         <div class="track" aria-hidden="true"><div id="bar"></div></div>
       </div>
     </header>
