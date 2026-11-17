@@ -62,15 +62,9 @@ const ALIASES = {
 };
 
 const statusEl = document.querySelector("#status");
-const countEl = document.querySelector("#count");
-const totalEl = document.querySelector("#total");
-const landPctEl = document.querySelector("#land-pct");
-const countryPctEl = document.querySelector("#country-pct");
-const barEl = document.querySelector("#bar");
-
 function formatPercent(value) {
   if (!(value > 0)) return "0%";
-  if (value < 0.1) return "<0.1%";
+  if (value < 1) return `${value.toFixed(2)}%`;
   if (value < 10) return `${value.toFixed(1)}%`;
   return `${Math.round(value)}%`;
 }
@@ -263,11 +257,13 @@ function boot() {
     }
     const countryPct = features.length ? (count / features.length) * 100 : 0;
     const landPct = landTotal ? (visitedLand / landTotal) * 100 : 0;
-    countEl.textContent = String(count);
-    totalEl.textContent = String(features.length);
-    countryPctEl.textContent = formatPercent(countryPct);
-    landPctEl.textContent = formatPercent(landPct);
-    barEl.style.width = `${landPct}%`;
+    const countryText = formatPercent(countryPct);
+    const landText = formatPercent(landPct);
+    document.querySelector("#total-pct").textContent = countryText;
+    document.querySelector("#count").textContent = String(count);
+    document.querySelector("#total").textContent = String(features.length);
+    document.querySelector("#land-pct").textContent = landText;
+    document.querySelector("#bar").style.width = `${countryPct}%`;
     clearButton.disabled = count === 0;
   }
 
