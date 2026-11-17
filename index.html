@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Countries I've visited</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="shell">
+    <header class="top">
+      <div>
+        <p class="eyebrow">Travel log</p>
+        <h1>Countries I've visited</h1>
+        <p class="lede">Click a country to mark it, and click it again to clear it. Search the list when a country is too small to hit. This browser saves your list on this computer.</p>
+      </div>
+      <div class="stats">
+        <p class="count"><strong id="count">0</strong> <span>visited</span></p>
+        <p class="of">of <span id="total">0</span> places on this map</p>
+        <div class="track" aria-hidden="true"><div id="bar"></div></div>
+      </div>
+    </header>
+
+    <div class="layout">
+      <section class="map-panel" aria-label="World map">
+        <div class="map-toolbar">
+          <p id="status">Scroll to zoom. Drag to move the map.</p>
+          <button type="button" id="reset">Reset view</button>
+        </div>
+        <svg id="map" role="img" aria-label="World map. Click a country to mark it visited."></svg>
+        <div class="legend">
+          <span><i class="swatch land"></i> Not visited</span>
+          <span><i class="swatch been"></i> Visited</span>
+          <span><i class="swatch speck"></i> Small country</span>
+        </div>
+      </section>
+
+      <aside class="panel">
+        <label class="search-label" for="search">Find a country</label>
+        <input id="search" type="search" placeholder="Norway, Japan, USA…" autocomplete="off" spellcheck="false">
+        <div class="modes" role="group" aria-label="Filter the list">
+          <button type="button" id="mode-all" class="is-on" aria-pressed="true">All</button>
+          <button type="button" id="mode-visited" aria-pressed="false">Visited</button>
+        </div>
+        <p id="shown" class="shown"></p>
+        <p id="empty" class="empty" hidden></p>
+        <div id="list" class="list"></div>
+        <p id="save-note" class="warn" hidden>This browser blocked saving, so the list will reset when you close the page.</p>
+        <button type="button" id="clear" class="clear" disabled>Clear visited</button>
+      </aside>
+    </div>
+  </div>
+
+  <script src="vendor/d3.min.js"></script>
+  <script src="vendor/topojson-client.min.js"></script>
+  <script src="data/world.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
