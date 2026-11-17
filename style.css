@@ -44,11 +44,7 @@ input {
 }
 
 .top {
-  display: flex;
-  justify-content: space-between;
-  gap: 24px;
-  align-items: flex-end;
-  margin-bottom: 20px;
+  margin-bottom: 16px;
 }
 
 .eyebrow {
@@ -75,23 +71,37 @@ h1 {
   color: var(--muted);
 }
 
-.stats {
-  min-width: 210px;
-  text-align: right;
+.totals {
+  margin-bottom: 18px;
+  padding: 18px 20px 16px;
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 20px;
+  box-shadow: var(--shadow);
+}
+
+.total-label {
+  margin: 0 0 4px;
+  font-size: 12px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--visited);
+  font-weight: 700;
 }
 
 .count {
   margin: 0;
   font-family: Palatino, "Palatino Linotype", Georgia, serif;
-  font-size: 42px;
-  line-height: 1;
+  font-size: clamp(48px, 8vw, 72px);
+  line-height: 0.95;
 }
 
 .count span,
 .of {
   font-family: "Segoe UI", sans-serif;
-  font-size: 14px;
+  font-size: 22px;
   color: var(--muted);
+  vertical-align: 14px;
 }
 
 .of {
@@ -106,9 +116,8 @@ h1 {
 
 .track {
   width: 100%;
-  max-width: 210px;
-  height: 8px;
-  margin-left: auto;
+  height: 10px;
+  margin-left: 0;
   border-radius: 999px;
   background: #e5d9c8;
   overflow: hidden;
@@ -397,7 +406,6 @@ h1 {
 
 @media (max-width: 860px) {
   .top,
-  .stats,
   .track {
     display: block;
     text-align: left;
