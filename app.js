@@ -170,10 +170,8 @@ function boot() {
       countryPaths.set(feature.key, this);
       d3.select(this).append("title").text(feature.label);
     })
-    .on("click", (event, feature) => {
-      if (event.defaultPrevented) return;
-      toggle(feature.key);
-    })
+    .on("pointerdown", rememberPress)
+    .on("pointerup", (event, feature) => selectIfClick(event, feature))
     .on("mouseenter", (event, feature) => highlight(feature.key))
     .on("mouseleave", () => highlight(null));
 
@@ -195,12 +193,26 @@ function boot() {
       dots.set(feature.key, this);
       d3.select(this).append("title").text(feature.label);
     })
-    .on("click", (event, feature) => {
-      if (event.defaultPrevented) return;
-      toggle(feature.key);
-    })
+    .on("pointerdown", rememberPress)
+    .on("pointerup", (event, feature) => selectIfClick(event, feature))
     .on("mouseenter", (event, feature) => highlight(feature.key))
     .on("mouseleave", () => highlight(null));
+
+  let press = null;
+
+  function rememberPress(event) {
+    press = { x: event.clientX, y: event.clientY, id: event.pointerId };
+  }
+
+  function selectIfClick(event, feature) {
+    if (event.pointerType === "mouse" && event.button !== 0) return;
+    if (!press || press.id !== event.pointerId) return;
+    const dx = event.clientX - press.x;
+    const dy = event.clientY - press.y;
+    press = null;
+    if (dx * dx + dy * dy > 64) return;
+    toggle(feature.key);
+  }
 
   function resizeDots() {
     dotsLayer.selectAll("circle").attr("r", 4.5 / currentScale);
@@ -259,11 +271,16 @@ function boot() {
     const landPct = landTotal ? (visitedLand / landTotal) * 100 : 0;
     const countryText = formatPercent(countryPct);
     const landText = formatPercent(landPct);
-    document.querySelector("#total-pct").textContent = countryText;
-    document.querySelector("#count").textContent = String(count);
-    document.querySelector("#total").textContent = String(features.length);
-    document.querySelector("#land-pct").textContent = landText;
-    document.querySelector("#bar").style.width = `${countryPct}%`;
+    const totalPct = document.querySelector("#total-pct");
+    const countNode = document.querySelector("#count");
+    const totalNode = document.querySelector("#total");
+    const landNode = document.querySelector("#land-pct");
+    const barNode = document.querySelector("#bar");
+    if (totalPct) totalPct.textContent = countryText;
+    if (countNode) countNode.textContent = String(count);
+    if (totalNode) totalNode.textContent = String(features.length);
+    if (landNode) landNode.textContent = landText;
+    if (barNode) barNode.style.width = `${countryPct}%`;
     clearButton.disabled = count === 0;
   }
 
@@ -332,6 +349,7 @@ function boot() {
 
   const zoom = d3.zoom()
     .scaleExtent([1, 16])
+    .clickDistance(8)
     .on("zoom", (event) => {
       currentScale = event.transform.k;
       zoomLayer.attr("transform", event.transform);
